@@ -18,12 +18,13 @@ class App extends Component {
     this.setState({isModalOpen: false});
   }
 
+  // render modal and backdrop in DOM only if it's needed to display instead of rendering every time with opacity: 0 - cleaner DOM
   render() {
     return (
       <div className="App">
         <h1>React Animations</h1>
-        <Modal closed={this.closeModal} show={this.state.isModalOpen} />
-        <Backdrop show={this.state.isModalOpen} />
+        {this.state.isModalOpen ? <Modal closed={this.closeModal} show={this.state.isModalOpen} /> : null}
+        {this.state.isModalOpen ? <Backdrop show={this.state.isModalOpen} /> : null}
         <button className="Button" onClick={this.showModal}>Open Modal</button>
         <h3>Animating Lists</h3>
         <List />
