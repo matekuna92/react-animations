@@ -22,14 +22,30 @@ class App extends Component {
 
   // render modal and backdrop in DOM only if it's needed to display instead of rendering every time with opacity: 0 - cleaner DOM
   // out animation doesnt work, because element is removed instantly from DOM, it doesnt wait for animation to finish
+  // if showBlock is true, then the content inside Transition component should be rendered
+  /*the div inside Transition is always present in the DOM, even if it has 0 opacity. To optimize DOM elements Transition component have:
+  mountOnEnter and unMountOnExit properties, so the element is only added to DOM when toggle button is clicked, and removed from DOM when state is exited */
   render() {
     return (
       <div className="App">
         <h1>React Animations</h1>
         <button onClick={() => this.setState(prevState => ({ showBlock: !prevState.showBlock }))}> Toggle </button>
-            {this.state.showBlock ? <div style={{ backgroundColor: 'red', width: '100px', height: '100px', margin: 'auto'}}></div> : null}
-            {this.state.isModalOpen ? <Modal closed={this.closeModal} show={this.state.isModalOpen} /> : null}
-            {this.state.isModalOpen ? <Backdrop show={this.state.isModalOpen} /> : null}
+
+        <Transition in={this.state.showBlock} timeout={1000}>
+          {state => (
+            <div style={{
+              backgroundColor: 'red',
+              width: '100px',
+              height: '100px',
+              margin: 'auto',
+              transition: 'opacity 1s ease-out',
+              opacity: state === 'exited' ? 0 : 1
+            }}></div>
+          )}
+        </Transition>
+
+        {this.state.isModalOpen ? <Modal closed={this.closeModal} show={this.state.isModalOpen} /> : null}
+        {this.state.isModalOpen ? <Backdrop show={this.state.isModalOpen} /> : null}
         <button className="Button" onClick={this.showModal}>Open Modal</button>
         <h3>Animating Lists</h3>
         <List />
