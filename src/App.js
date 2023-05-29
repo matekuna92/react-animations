@@ -25,13 +25,22 @@ class App extends Component {
   // if showBlock is true, then the content inside Transition component should be rendered
   /*the div inside Transition is always present in the DOM, even if it has 0 opacity. To optimize DOM elements Transition component have:
   mountOnEnter and unMountOnExit properties, so the element is only added to DOM when toggle button is clicked, and removed from DOM when state is exited */
+
+  // different functions can be written for different states of transition: onEnter, onExiting...
   render() {
     return (
       <div className="App">
         <h1>React Animations</h1>
         <button onClick={() => this.setState(prevState => ({ showBlock: !prevState.showBlock }))}> Toggle </button>
 
-        <Transition in={this.state.showBlock} timeout={1000} mountOnEnter={true} unmountOnExit={true}>
+        <Transition in={this.state.showBlock} timeout={1000} mountOnEnter={true} unmountOnExit={true}
+          onEnter={() => console.log('onenter')}
+          onEntering={() => console.log('onentering')}
+          onEntered={() => console.log('onentered')}
+          onExit={() => console.log('onexit')}
+          onExiting={() => console.log('onexiting')}
+          onExited={() => console.log('onexited')}
+        >
           {state => (
             <div style={{
               backgroundColor: 'red',
